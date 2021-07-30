@@ -70,13 +70,13 @@ module.exports = function SettingsBill() {
 	}
 
 	function totals() {
-			let smsTotal = getTotal("sms").toFixed(2);
-			let callTotal = getTotal("call").toFixed(2);
-			return {
-				smsTotal,
-				callTotal,
-				grandTotal: grandTotal().toFixed(2)
-			};
+		let smsTotal = getTotal("sms").toFixed(2);
+		let callTotal = getTotal("call").toFixed(2);
+		return {
+			smsTotal,
+			callTotal,
+			grandTotal: grandTotal().toFixed(2),
+		};
 	}
 
 	function hasReachedWarningLevel() {
@@ -91,6 +91,15 @@ module.exports = function SettingsBill() {
 		return total >= criticalLevel;
 	}
 
+	function disableBtn() {
+		if (hasReachedCriticalLevel()) {
+			return "button";
+		} else if (hasReachedWarningLevel()) {
+			return "submit";
+		} else {
+			return "submit";
+		}
+	}
 	function theLevels() {
 		if (hasReachedCriticalLevel()) {
 			return "danger";
@@ -102,12 +111,14 @@ module.exports = function SettingsBill() {
 	}
 
 	return {
+
 		setSettings,
 		getSettings,
 		recordAction,
 		actions,
 		actionsFor,
 		totals,
+		disableBtn,
 		theLevels,
 		hasReachedWarningLevel,
 		hasReachedCriticalLevel,

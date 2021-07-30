@@ -25,6 +25,7 @@ app.get("/", (req, res) => {
 		settings: settingsBillFactory.getSettings(),
 		totals: settingsBillFactory.totals(),
 		theLevels: settingsBillFactory.theLevels(),
+		disableBtn: settingsBillFactory.disableBtn(),
 	});
 });
 
