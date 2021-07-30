@@ -4,12 +4,15 @@ const bodyParser = require("body-parser");
 const SettingsBill = require("./settings-bill");
 const settingsBillFactory = SettingsBill();
 const app = express();
+var moment = require("moment");
+moment().format();
+
 const handlebarSetup = exphbs({
 	partialsDir: "./views/partials",
 	viewPath: "./views",
 	layoutsDir: "./views/layouts",
 });
-app.use(express.static("public")); 
+app.use(express.static("public"));
 app.engine("handlebars", handlebarSetup);
 app.set("view engine", "handlebars");
 // parse application/x-www-form-urlencoded
@@ -21,6 +24,7 @@ app.get("/", (req, res) => {
 	res.render("index", {
 		settings: settingsBillFactory.getSettings(),
 		totals: settingsBillFactory.totals(),
+		theLevels: settingsBillFactory.theLevels(),
 	});
 });
 
@@ -38,11 +42,21 @@ app.post("/action", (req, res) => {
 	res.redirect("/");
 });
 app.get("/actions", (req, res) => {
+	const actions = settingsBillFactory.actions();
+	for (let prop of actions) {
+		prop.ago = moment(prop.timestamp).fromNow();
+	}
 	res.render("actions", { actions: settingsBillFactory.actions() });
 });
-app.get("/actions/:type", (req, res) => {
+app.get("/actions/:actionType", (req, res) => {
 	const actionType = req.params.actionType;
-	res.render("actions", { actions: settingsBillFactory.actionsFor(actionType) });
+	const actions = settingsBillFactory.actionsFor(actionType);
+	for (let prop of actions) {
+		prop.ago = moment(prop.timestamp).fromNow();
+	}
+	res.render("actions", {
+		actions: settingsBillFactory.actionsFor(actionType),
+	});
 });
 
 const PORT = process.env.PORT || 9090;
