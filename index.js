@@ -15,9 +15,9 @@ const handlebarSetup = exphbs({
 app.use(express.static("public"));
 app.engine("handlebars", handlebarSetup);
 app.set("view engine", "handlebars");
-// parse application/x-www-form-urlencoded
+//parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
-// parse application/json
+//parse application/json
 app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
